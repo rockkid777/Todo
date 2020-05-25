@@ -1,10 +1,22 @@
 version: "3.8"
 services:
   webapp:
-    build: .
+    build:
+      context: .
     ports:
       - "9090:80"
+    environment:
+      DOTNET_ENVIRONMENT: "Container"
+    deploy:
+      restart_policy:
+        condition: on-failure
+
   db:
     image: postgres
     environment:
       POSTGRES_PASSWORD: "almafa"
+    volumes:
+      - "./data:/var/lib/postgresql/data:rw"
+    deploy:
+      restart_policy:
+        condition: on-failure
